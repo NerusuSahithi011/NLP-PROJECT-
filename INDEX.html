@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Spam Detection</title>
+
+    <!-- CSS Styling -->
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 420px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 8px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 20px;
+            background: #4facfe;
+            color: white;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            background: #ff6b6b;
+        }
+
+        .block-btn {
+            background: red;
+        }
+
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .spam {
+            color: red;
+        }
+
+        .not-spam {
+            color: green;
+        }
+
+        #loading {
+            display: none;
+            margin-top: 10px;
+        }
+
+        mark {
+            background-color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>📩 Spam Detection</h2>
+
+    <!-- Input -->
+    <textarea id="message" placeholder="Enter your message here..."></textarea>
+
+    <!-- Buttons -->
+    <br>
+    <button onclick="checkSpam()">Check</button>
+    <button class="clear-btn" onclick="clearText()">Clear</button>
+    <button class="block-btn" onclick="blockSender()">Block</button>
+
+    <!-- Loading -->
+    <div id="loading">Checking...</div>
+
+    <!-- Result -->
+    <div id="result" class="result"></div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Sample spam keywords
+    const spamWords = ["win", "free", "prize", "money", "click", "offer"];
+
+    function checkSpam() {
+        let text = document.getElementById("message").value.toLowerCase();
+        let resultDiv = document.getElementById("result");
+        let loading = document.getElementById("loading");
+
+        // Show loading
+        loading.style.display = "block";
+        resultDiv.innerHTML = "";
+
+        setTimeout(() => {
+            loading.style.display = "none";
+
+            let isSpam = false;
+
+            spamWords.forEach(word => {
+                if (text.includes(word)) {
+                    isSpam = true;
+                }
+            });
+
+            // Highlight spam words
+            let highlightedText = text;
+            spamWords.forEach(word => {
+                let regex = new RegExp(`(${word})`, "gi");
+                highlightedText = highlightedText.replace(regex, "<mark>$1</mark>");
+            });
+
+            if (isSpam) {
+                resultDiv.innerHTML = `<span class="spam">⚠ Spam Detected!</span><br>${highlightedText}`;
+            } else {
+                resultDiv.innerHTML = `<span class="not-spam">✅ Not Spam</span>`;
+            }
+
+        }, 1000);
+    }
+
+    function clearText() {
+        document.getElementById("message").value = "";
+        document.getElementById("result").innerHTML = "";
+    }
+
+    function blockSender() {
+        alert("🚫 Sender Blocked (Demo Feature)");
+    }
+</script>
+
+</body>
+</html>
